@@ -110,4 +110,14 @@ class CarMasterController extends Controller
 		$car_details = CarMaser::get();
 		return Response::success('200','',$car_details);
 	}
+	
+	public function getAvailableCars(){
+		$car_details = CarMaser::where('is_booked', 0)->get();
+		return Response::success('200','',$car_details);
+	}
+	
+	public function getRentedCars(){
+		$car_details = CarMaser::where('is_booked', 1)->get();
+		return Response::success('200','',$car_details);
+	}
 }

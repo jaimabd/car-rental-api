@@ -20,3 +20,10 @@ Route::post('/user-verification', 'WelcomeController@verify');
 
 Route::post('/car-master-create', 'CarMasterController@createCarMaster');
 Route::get('/car-master-get', 'CarMasterController@getCarMaster');
+Route::get('/car-master-get-available-cars', 'CarMasterController@getAvailableCars');
+Route::get('/car-master-get-rented-cars', 'CarMasterController@getRentedCars');
+
+Route::post('/customer-master-create', 'CustomerMasterController@createCustomerMaster');
+Route::get('/customer-rented-cars', 'CustomerMasterController@getRentedCars');
+Route::post('/customer-master-rent-car', 'CustomerMasterController@customerRentACar');
+Route::post('/customer-master-end-lease', 'CustomerMasterController@customerEndLease');
