@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/user-verification', 'WelcomeController@verify');
+
+
+Route::post('/car-master-create', 'CarMasterController@createCarMaster');
+Route::get('/car-master-get', 'CarMasterController@getCarMaster');
