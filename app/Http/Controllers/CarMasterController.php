@@ -99,7 +99,7 @@ class CarMasterController extends Controller
 		$create_user->brand_name = Input::get('brand_name');
 		$create_user->description = Input::get('description');
 		$create_user->type = Input::get('type');
-		$create_user->color = Input::get('brand_name');
+		$create_user->color = Input::get('color');
 		$create_user->is_booked = Input::get('is_booked');	
 		$create_user->save();
 		
