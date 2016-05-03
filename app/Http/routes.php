@@ -19,11 +19,17 @@ Route::post('/user-verification', 'WelcomeController@verify');
 
 
 Route::post('/car-master-create', 'CarMasterController@createCarMaster');
+Route::post('/car-master-update', 'CarMasterController@updateCarMaster');
+Route::post('/car-master-delete', 'CarMasterController@deleteCarMaster');
+Route::get('/car-master-edit', 'CarMasterController@editCarMaster');
 Route::get('/car-master-get', 'CarMasterController@getCarMaster');
 Route::get('/car-master-get-available-cars', 'CarMasterController@getAvailableCars');
 Route::get('/car-master-get-rented-cars', 'CarMasterController@getRentedCars');
 
 Route::post('/customer-master-create', 'CustomerMasterController@createCustomerMaster');
+Route::post('/car-master-update', 'CarMasterController@updateCarMaster');
+Route::post('/car-master-delete', 'CarMasterController@deleteCarMaster');
+Route::get('/car-master-edit', 'CarMasterController@editCarMaster');
 Route::get('/customer-rented-cars', 'CustomerMasterController@getRentedCars');
 Route::post('/customer-master-rent-car', 'CustomerMasterController@customerRentACar');
 Route::post('/customer-master-end-lease', 'CustomerMasterController@customerEndLease');
