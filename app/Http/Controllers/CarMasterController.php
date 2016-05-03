@@ -100,10 +100,35 @@ class CarMasterController extends Controller
 		$create_user->description = Input::get('description');
 		$create_user->type = Input::get('type');
 		$create_user->color = Input::get('color');
-		$create_user->is_booked = Input::get('is_booked');	
+		//$create_user->is_booked = Input::get('is_booked');		
+
 		$create_user->save();
 		
 		return Response::success('200','',$create_user);
+	}
+	
+	public function editCarMaster(){
+		$edit_cars = CarMaser::where('id', Input::get('car_id'))->first();
+		return Response::success('200','',$edit_cars);
+	}
+	
+	public function deleteCarMaster(){
+		$delete_cars = CarMaser::where('id', Input::get('car_id'))->delete();
+		return Response::success('200','',$delete_cars);
+	}
+	
+	public function updateCarMaster(){
+		
+		$update_user = CarMaser::where('id', Input::get('id'))->first();
+		$update_user->name = Input::get('name');
+		$update_user->brand_name = Input::get('brand_name');
+		$update_user->description = Input::get('description');
+		$update_user->type = Input::get('type');
+		$update_user->color = Input::get('color');		
+		$update_user->save();
+		
+		return Response::success('200','',$update_user);
+		
 	}
 	
 	public function getCarMaster(){

@@ -103,7 +103,7 @@ class CustomerMasterController extends Controller
 		}
 		
         $create_user = new CustomerMaster();
-		$create_user->name = Input::get('name');
+		$create_user->name = Input::get('customer_name');
 		$create_user->email = Input::get('email');
 		$create_user->phone = Input::get('phone');
 		$create_user->password = Hash::make(Input::get('password'));

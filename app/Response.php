@@ -8,7 +8,7 @@ class Response extends Model
 {
     public static function success($code,$message,$data){
 
-        $response =  array();
+        $response = array();
 
         $response['code'] = $code;
         $response['message'] = $message;
@@ -19,7 +19,7 @@ class Response extends Model
     }
 
     public static function failure($code, $message){
-        $response =  array();
+        $response = array();
 
         $response['code'] = $code;
         $response['message'] = $message;
