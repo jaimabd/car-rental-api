@@ -137,6 +137,7 @@ class CarMasterController extends Controller
 	}
 	
 	public function getAvailableCars(){
+		
 		$car_details = CarMaser::where('is_booked', 0)->get();
 		return Response::success('200','',$car_details);
 	}

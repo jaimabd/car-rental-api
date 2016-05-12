@@ -18,7 +18,7 @@ class CreateCarBooking extends Migration
 			$table->integer('customer_id')->nullable()->unsigned();
 			$table->date('dude_date');
             $table->string('amount');
-			$table->foreign('car_id')->references('id')->on('user_master');
+			$table->foreign('car_id')->references('id')->on('car_master');
 			$table->foreign('customer_id')->references('id')->on('customer_master');
             $table->integer('created_by')->nullable()->unsigned();
             $table->foreign('created_by')->references('id')->on('user_master');

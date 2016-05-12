@@ -10,10 +10,12 @@ use App\CustomerMaster;
 use View;
 use DB;
 use Hash;
+use Session;
 use Input;
 use Auth;
 use App\Response;
 use App\CarBooking;
+use App\CarMaser;
 
 class CustomerMasterController extends Controller
 {
@@ -103,7 +105,7 @@ class CustomerMasterController extends Controller
 		}
 		
         $create_user = new CustomerMaster();
-		$create_user->name = Input::get('customer_name');
+		$create_user->name = Input::get('name');
 		$create_user->email = Input::get('email');
 		$create_user->phone = Input::get('phone');
 		$create_user->password = Hash::make(Input::get('password'));
@@ -111,6 +113,36 @@ class CustomerMasterController extends Controller
 		
 		return Response::success('200','',$create_user);
     }
+	
+	public function getCustomerMaster() {
+		$customer_details = CustomerMaster::get();
+		return Response::success('200','',$customer_details);
+		
+		
+	}
+	public function editCustomerMaster(){
+		$edit_customers = CustomerMaster::where('id', Input::get('customer_id'))->first();
+		return Response::success('200','',$edit_customers);
+	}
+	
+	public function deleteCustomerMaster(){
+		$delete_customers = CustomerMaster::where('id', Input::get('customer_id'))->delete();
+		return Response::success('200','',$delete_customers);
+	}
+	
+	public function updateCustomerMaster(){
+		
+		$create_user = CustomerMaster::where('id', Input::get('id'))->first();
+		$create_user->name = Input::get('name');
+		$create_user->email = Input::get('email');
+		$create_user->phone = Input::get('phone');
+		$create_user->password = Hash::make(Input::get('password'));
+		$create_user->save();
+		
+		return Response::success('200','',$create_user);
+		
+	}
+	
 	
 	public function getRentedCars(){
 		
@@ -123,6 +155,10 @@ class CustomerMasterController extends Controller
 									on car_bking.car_id = cust_mst.id
 									where car_bking.lease_status = 1
 									and car_bking.customer_id = ".Input::get('customer_id');
+									
+			$rented_car_details_sql = "select car_master.*, car_booking.*, car_booking.id as car_id from car_booking left join car_master 
+									on car_booking.car_id = car_master.id where car_booking.customer_id = '".Input::get('customer_id')."'
+									and car_booking.lease_status = 1";
 		$rented_car_details = DB::select(DB::raw($rented_car_details_sql));
 		 
 		return Response::success('200','',$rented_car_details);
@@ -130,35 +166,66 @@ class CustomerMasterController extends Controller
 	
 	public function customerRentACar()
     {
-		$booking_exist = CarBooking::where('customer_id',Input::get('customer_id'))
-							->where('lease_status',Input::get('lease_status'))
-							->first();
 		
-		if($booking_exist){
-			return json_encode("already booked a car");
+		$booking_exist = CarBooking::where('customer_id',Input::get('customer_id'))
+							->where('lease_status',1)
+							->get();
+		
+		if(count($booking_exist) > 0 ){
+			
+			return Response::success('202','already booked a car', '');
 		}
 		
-        $new_booking = new CarBooking();
-		$create_user->car_id = Input::get('car_id');
-		$create_user->customer_id = Input::get('customer_id');
-		$create_user->dude_date = Input::get('dude_date');
-		$create_user->amount = Input::get('amount');
-		$create_user->lease_status = 1;
-		$create_user->save();
 		
-		return Response::success('200','',$create_user);
+        $new_booking = new CarBooking();
+		$new_booking->car_id = Input::get('car_id');
+		$new_booking->customer_id = Input::get('customer_id');
+		$new_booking->dude_date = date('Y-m-d', strtotime(Input::get('due_date')));
+		$new_booking->amount = Input::get('amount');
+		$new_booking->lease_status = 1;
+		$new_booking->save();
+		
+		$update_car = CarMaser::where('id', Input::get('car_id'))->first();
+		$update_car->is_booked = 1;
+		$update_car->save();
+		
+		return Response::success('200','',$new_booking);
     }
 	
 	public function customerEndLease()
     {
-		$booking_exist = CarBooking::where('customer_id',Input::get('customer_id'))
-							->where('lease_status',Input::get('lease_status'))
-							->first();
 		
-		if($booking_exist){
-			$booking_exist->lease_status = 0;
-			$booking_exist->save();
-			return Response::success('200','',$booking_exist);
-		}
+		$end_lease = CarBooking::where('id', Input::get('id'))
+							->first();
+							
+		$end_lease->lease_status = 0;
+	$end_lease->save();
+$update_car = CarMaser::where('id', $end_lease->car_id)->first();
+		$update_car->is_booked = 0;
+		$update_car->save();
+		
+		return Response::success('200','success','');
+	
+		
     }
+	public function customerLogin() {
+		$name = Input::get('user_name');
+	    $password = Input::get('password');		
+		
+		$customer_master = CustomerMaster::where('email', $name)->first();
+		
+     	if(Hash::check($password, $customer_master->password)){				
+				
+				Session::put('user_id',$customer_master->id);
+				
+				Session::put('email',$customer_master->email);
+				Session::put('name',$customer_master->name);								
+				return Response::success('200','true',$customer_master->id);
+				
+	        }
+	        else{    
+	            
+	            return Response::failure('404','Failed');
+	        }	
+	}
 }
